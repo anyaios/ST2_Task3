@@ -11,8 +11,7 @@
 
 @interface MainTableViewController ()
 @property (strong, nonatomic) UIImage *image;
-
-
+@property (strong, nonatomic) NSString *imageURL;
 @end
 
 @implementation MainTableViewController
@@ -26,6 +25,8 @@
     [super loadView];
     self.title = @"Images";
     _image = [UIImage imageNamed:@"placeholder"];
+    _imageURL = @"sjdhfksjdhflkshlkjshglkhdflgkhdflkghnx.dkbnxc,b";
+    
    
 }
 
@@ -40,20 +41,37 @@
 
     return 60;
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return UITableViewAutomaticDimension;
+}
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *mainId = @"MainCellid";
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:mainId];
     UITableViewCell *cell =  [tableView dequeueReusableCellWithIdentifier:mainId];
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mainId];
     }
-    cell.textLabel.text = @"images URL";
-    cell.imageView.image = _image;
-    
+    cell.textLabel.text = _imageURL;
+    cell.textLabel.numberOfLines = 0;
+    cell.imageView.image = [self sizeForImage:_image changeToSize:CGSizeMake(100,100)];
     return cell;
  
 }
+- (UIImage *)sizeForImage:(UIImage *)image changeToSize:(CGSize)newSize {
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+
 
 
 /*
