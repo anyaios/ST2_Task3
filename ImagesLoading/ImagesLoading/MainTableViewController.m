@@ -10,7 +10,8 @@
 
 
 @interface MainTableViewController ()
-@property (strong, nonatomic) UITableViewCell *mainCell;
+@property (strong, nonatomic) UIImage *image;
+
 
 @end
 
@@ -24,6 +25,7 @@
 -(void)loadView {
     [super loadView];
     self.title = @"Images";
+    _image = [UIImage imageNamed:@"placeholder"];
    
 }
 
@@ -47,6 +49,7 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mainId];
     }
     cell.textLabel.text = @"images URL";
+    cell.imageView.image = _image;
     
     return cell;
  
