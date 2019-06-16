@@ -12,6 +12,7 @@
 @interface MainTableViewController ()
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSString *imageURL;
+@property (strong,nonatomic) NSURL *url;
 @end
 
 @implementation MainTableViewController
@@ -24,11 +25,13 @@
 -(void)loadView {
     [super loadView];
     self.title = @"Images";
-    _image = [UIImage imageNamed:@"placeholder"];
-    _imageURL = @"sjdhfksjdhflkshlkjshglkhdflgkhdflkghnx.dkbnxc,b";
-    //self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _url= [NSURL URLWithString:@"https://media.mnn.com/assets/images/2019/01/grumpy_cat.jpg.653x0_q80_crop-smart.jpg"];
+    NSData *data = [NSData dataWithContentsOfURL:_url];
+    _image = [UIImage imageWithData:data];
     
-   
+    
+    _imageURL = @"sjdhfksjdhflkshlkjshglkhdflgkhdflkghnx.dkbnxc,b";
+    
 }
 
 #pragma mark - Table view data source
@@ -58,24 +61,41 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mainId];
     }
+    
     cell.textLabel.text = _imageURL;
     cell.textLabel.numberOfLines = 0;
     cell.imageView.image = [self sizeForImage:_image changeToSize:CGSizeMake(100,100)];
+   
+    [cell.imageView setFrame:CGRectMake(0, 0, 100, 100)];
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
     cell.separatorInset = UIEdgeInsetsZero;
     cell.layoutMargins = UIEdgeInsetsZero;
     cell.preservesSuperviewLayoutMargins = NO;
+    
     return cell;
  
 }
 
 - (UIImage *)sizeForImage:(UIImage *)image changeToSize:(CGSize)newSize {
-    UIGraphicsBeginImageContext(newSize);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    
+    CGRect imageRect = CGRectZero;
+    CGFloat imageWidth = newSize.width / image.size.width;
+    CGFloat imageHeight = newSize.height / image.size.height;
+    CGFloat aspectRatio = MIN ( imageWidth, imageHeight );
+    
+    imageRect.size.width = image.size.width * aspectRatio;
+    imageRect.size.height = image.size.height * aspectRatio;
+    imageRect.origin.x = (newSize.width - imageRect.size.width) / 2.0f;
+    imageRect.origin.y = (newSize.height - imageRect.size.height) / 2.0f;
+    
+    UIGraphicsBeginImageContextWithOptions( newSize, NO, 0 );
+    [image drawInRect:imageRect];
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return newImage;
+    
+    return scaledImage;
 }
-
 
 
 
