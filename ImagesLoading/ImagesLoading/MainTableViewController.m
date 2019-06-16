@@ -7,6 +7,7 @@
 //
 
 #import "MainTableViewController.h"
+#import "DetailsViewController.h"
 
 
 @interface MainTableViewController ()
@@ -45,9 +46,11 @@
 
     return 60;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return UITableViewAutomaticDimension;
@@ -71,6 +74,10 @@
     cell.separatorInset = UIEdgeInsetsZero;
     cell.layoutMargins = UIEdgeInsetsZero;
     cell.preservesSuperviewLayoutMargins = NO;
+    [cell.imageView setUserInteractionEnabled: YES];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickOnImage)];
+    [cell.imageView addGestureRecognizer:tap];
     
     return cell;
  
@@ -97,7 +104,13 @@
     return scaledImage;
 }
 
+#pragma mark - Delegate
 
+-(void)clickOnImage{
+    DetailsViewController *detailsVC = [DetailsViewController new];
+    detailsVC.detailsImage = _image;
+    [self.navigationController pushViewController:detailsVC animated:YES];
+}
 
 /*
 // Override to support conditional editing of the table view.
