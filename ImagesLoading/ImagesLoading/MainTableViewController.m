@@ -26,6 +26,7 @@
     self.title = @"Images";
     _image = [UIImage imageNamed:@"placeholder"];
     _imageURL = @"sjdhfksjdhflkshlkjshglkhdflgkhdflkghnx.dkbnxc,b";
+    //self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     
    
 }
@@ -60,9 +61,13 @@
     cell.textLabel.text = _imageURL;
     cell.textLabel.numberOfLines = 0;
     cell.imageView.image = [self sizeForImage:_image changeToSize:CGSizeMake(100,100)];
+    cell.separatorInset = UIEdgeInsetsZero;
+    cell.layoutMargins = UIEdgeInsetsZero;
+    cell.preservesSuperviewLayoutMargins = NO;
     return cell;
  
 }
+
 - (UIImage *)sizeForImage:(UIImage *)image changeToSize:(CGSize)newSize {
     UIGraphicsBeginImageContext(newSize);
     [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
