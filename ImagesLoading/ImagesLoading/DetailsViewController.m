@@ -10,7 +10,7 @@
 #import "MainTableViewController.h"
 
 @interface DetailsViewController ()
-
+@property (strong, nonatomic) UIImageView *detailsView;
 @end
 
 @implementation DetailsViewController
@@ -18,8 +18,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIImageView *detailsView = [[UIImageView alloc] initWithImage:_detailsImage];
-    [self.view addSubview:detailsView];
+    _detailsView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    if (_detailsImage.size.width > self.view.bounds.size.width || _detailsImage.size.height > self.view.bounds.size.height) {
+    //CGFloat imageRatio = _detailsImage.size.height / _detailsImage.size.width;
+        _detailsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+        _detailsView.image = _detailsImage;
+       
+    }
+    else {
+        _detailsView.image = _detailsImage;
+    }
+     _detailsView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:_detailsView];
+    
    
 }
 
